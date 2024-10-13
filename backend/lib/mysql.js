@@ -116,6 +116,6 @@ const dbOperations = {
   deleteFundraiser: (fundraiserId) => {
     const sql = `DELETE FROM FUNDRAISER WHERE FUNDRAISER_ID = ?`;
     return query(sql, [fundraiserId]);
-  }
+  },
 };
 module.exports = dbOperations;

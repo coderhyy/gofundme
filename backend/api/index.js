@@ -56,6 +56,11 @@ router.get('/api/allCategories', errorHandler, async (ctx) => {
   handleResponse(ctx, result, 'query success', 'no data');
 });
 
+router.get('/api/donationForFundraiser/:id',errorHandler, async (ctx) =>{
+  const fundraiserId = ctx.params.id;
+  const result = await Model.findDonationbyFundraiserId(fundraiserId);
+  handleResponse(ctx, result, 'query success', 'no data')
+});
 router.post('/api/addDonation', errorHandler, async (ctx) => {
   list = ctx.request.body;
   var values = [list.DATE,list.AMOUNT,list.GIVER,list.FUNDRAISER_ID];
