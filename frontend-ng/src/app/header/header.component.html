@@ -1,0 +1,19 @@
+<style>
+  .active {
+    color: #3b82f6; /* 这是 Tailwind 的 blue-500 颜色 */
+    font-weight: bold;
+  }
+</style>
+
+<nav class="flex justify-between items-center p-4 shadow-md">
+  <h1 class="text-2xl font-bold">Logo</h1>
+  <ul class="flex gap-4">
+    <li>
+      <a routerLink="/home" routerLinkActive="active">Home</a>
+    </li>
+    <li>
+      <a routerLink="/search" routerLinkActive="active">Search</a>
+    </li>
+  </ul>
+  <button class="bg-blue-500 text-white px-4 py-2 rounded-md">Login</button>
+</nav>
