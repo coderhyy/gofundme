@@ -1,1 +1,54 @@
-<p>{{ fundraiser?.CAPTION }}</p>
+@if (fundraiser) {
+<div class="max-w-2xl mx-auto my-4 p-6 bg-white shadow-lg rounded-lg">
+  <h2 class="text-3xl font-bold mb-6 text-gray-800">
+    {{ fundraiser.CAPTION }}
+  </h2>
+
+  <div class="space-y-4 mb-6">
+    <p>
+      <span class="font-semibold text-gray-700">Organizer:</span>
+      {{ fundraiser.ORGANIZER }}
+    </p>
+    <p>
+      <span class="font-semibold text-gray-700">City:</span>
+      {{ fundraiser.CITY }}
+    </p>
+    <p>
+      <span class="font-semibold text-gray-700">Category:</span>
+      {{ fundraiser.CATEGORY_NAME }}
+    </p>
+    <p>
+      <span class="font-semibold text-gray-700">Target Funding:</span>
+      {{ fundraiser.TARGET_FUNDING }}
+    </p>
+    <p>
+      <span class="font-semibold text-gray-700">Current Funding:</span>
+      {{ fundraiser.CURRENT_FUNDING }}
+    </p>
+  </div>
+
+  <a
+    [routerLink]="['/donation', fundraiser.FUNDRAISER_ID]"
+    class="block w-full py-3 px-4 text-center text-white bg-blue-600 hover:bg-blue-700 rounded-md transition duration-300 mb-8"
+    >Donate Now</a
+  >
+
+  <h3 class="text-2xl font-semibold mb-4 text-gray-800">Recent Donations</h3>
+  <ul class="space-y-3">
+    <li class="bg-gray-100 p-3 rounded-md grid grid-cols-3">
+      <span class="font-medium text-gray-800">Giver</span>
+      <span class="font-medium text-gray-800">Amount</span>
+      <span class="font-medium text-gray-800">Date</span>
+    </li>
+    @for (donation of donations; track donation.DONATION_ID) {
+    <li class="bg-gray-100 p-3 rounded-md grid grid-cols-3">
+      <span class="font-medium text-gray-800">{{ donation.GIVER }}</span>
+      <span class="font-semibold text-green-600">{{ donation.AMOUNT }}</span>
+      <span class="text-gray-600">
+        {{ donation.DATE | date }}
+      </span>
+    </li>
+    }
+  </ul>
+</div>
+}

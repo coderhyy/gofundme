@@ -1,0 +1,50 @@
+@if (fundraiser) {
+<div>
+  <div class="mb-4">
+    <h2 class="text-2xl font-semibold">Donate to {{ fundraiser.CAPTION }}</h2>
+    <p>Organizer: {{ fundraiser.ORGANIZER }}</p>
+  </div>
+
+  <form class="space-y-4" (ngSubmit)="submitDonation()">
+    <div>
+      <label class="block" for="amount"> Donation Amount (AUD): </label>
+      <input
+        class="border border-gray-300 rounded-md"
+        type="number"
+        id="amount"
+        name="amount"
+        [(ngModel)]="donation.AMOUNT"
+        required
+      />
+    </div>
+    <div>
+      <label class="block" for="giver">Your Name:</label>
+      <input
+        class="border border-gray-300 rounded-md"
+        type="text"
+        id="giver"
+        name="giver"
+        [(ngModel)]="donation.GIVER"
+        required
+      />
+    </div>
+    <button class="bg-blue-500 text-white px-4 py-2 rounded-md" type="submit">
+      Submit my donation
+    </button>
+  </form>
+</div>
+} @if (showDialog) {
+<div
+  class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
+>
+  <div class="bg-white p-6 rounded-lg">
+    <p>{{ dialogMessage }}</p>
+    <button
+      class="mt-4 bg-blue-500 text-white px-4 py-2 rounded-md"
+      (click)="closeDialog()"
+    >
+      Close
+    </button>
+  </div>
+</div>
+}

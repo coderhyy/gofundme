@@ -1,1 +1,61 @@
-<p>search works!</p>
+<form (ngSubmit)="searchFundraisers()" #searchForm="ngForm">
+  <h2 class="text-2xl font-bold">Search Fundraiser</h2>
+
+  <div>
+    <label>
+      <input
+        type="checkbox"
+        [(ngModel)]="searchCriteria.ORGANIZER"
+        name="ORGANIZER"
+      />
+      Organizer
+    </label>
+  </div>
+
+  <div>
+    <label>
+      <input type="checkbox" [(ngModel)]="searchCriteria.CITY" name="CITY" />
+      City
+    </label>
+  </div>
+
+  <div>
+    <label>
+      <input
+        type="checkbox"
+        [(ngModel)]="searchCriteria.CATEGORY"
+        name="CATEGORY"
+      />
+      Category
+    </label>
+  </div>
+
+  <div class="flex gap-2">
+    <button class="bg-blue-500 text-white px-4 py-2 rounded" type="submit">
+      Search
+    </button>
+    <button
+      class="bg-red-500 text-white px-4 py-2 rounded"
+      type="button"
+      (click)="clearCheckboxes()"
+    >
+      Clear
+    </button>
+  </div>
+</form>
+
+@if(errorMessage) {
+<div class="error-message">
+  {{ errorMessage }}
+</div>
+} @if(fundraisers.length > 0) {
+
+<div class="grid grid-cols-3 gap-4">
+  @for(fundraiser of fundraisers; track fundraiser.FUNDRAISER_ID) {
+  <card [item]="fundraiser" />
+  }
+</div>
+
+} @if(noResults) {
+<p class="no-results">No matching fundraisers found.</p>
+}

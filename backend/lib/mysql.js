@@ -75,7 +75,7 @@ const dbOperations = {
   insertDonationForFundraiser: (values) => {
     const sql = `INSERT INTO DONATION (DATE, AMOUNT, GIVER, FUNDRAISER_ID)
     VALUES (?)`;
-    return query(sql,[values]);
+    return query(sql, [values]);
   },
 
   findFundraisersByCategory: (categoryId) => {
@@ -91,7 +91,7 @@ const dbOperations = {
   insertFundraiser: (values) => {
     const sql = `INSERT INTO FUNDRAISER (ORGANIZER, CAPTION, TARGET_FUNDING, CURRENT_FUNDING, CITY, ACTIVE, CATEGORY_ID)
     VALUES (?)`;
-    return query(sql,[values]);
+    return query(sql, [values]);
   },
   updateFundraiser: (values) => {
     const sql = `
@@ -109,8 +109,8 @@ const dbOperations = {
     return query(sql, values);
   },
 
-  findDonationbyFundraiserId: (fundraiserId) =>{
-    const sql = `select * from donation where FUNDRAISER_ID = ?`;
+  findDonationbyFundraiserId: (fundraiserId) => {
+    const sql = `select * from DONATION where FUNDRAISER_ID = ?`;
     return query(sql, fundraiserId)
   },
   deleteFundraiser: (fundraiserId) => {
