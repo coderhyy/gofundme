@@ -1,0 +1,245 @@
+<div class="container mx-auto p-4">
+  <h1 class="text-2xl font-bold mb-4">Fundraiser Admin</h1>
+
+  <!-- 募捐活动列表 -->
+  <div class="mb-8">
+    <h2 class="text-xl font-semibold mb-2">Fundraiser List</h2>
+    <table class="w-full border-collapse border">
+      <thead>
+        <tr>
+          <th class="border p-2">Caption</th>
+          <th class="border p-2">Organizer</th>
+          <th class="border p-2">City</th>
+          <th class="border p-2">Category</th>
+          <th class="border p-2">Target</th>
+          <th class="border p-2">Current</th>
+          <th class="border p-2">Status</th>
+          <th class="border p-2">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (fundraiser of fundraisers; track fundraiser.FUNDRAISER_ID) {
+        <tr>
+          <td class="border p-2">{{ fundraiser.CAPTION }}</td>
+          <td class="border p-2">{{ fundraiser.ORGANIZER }}</td>
+          <td class="border p-2">{{ fundraiser.CITY }}</td>
+          <td class="border p-2">
+            {{ getCategoryName(fundraiser.CATEGORY_ID) }}
+          </td>
+          <td class="border p-2">{{ fundraiser.TARGET_FUNDING | currency }}</td>
+          <td class="border p-2">
+            {{ fundraiser.CURRENT_FUNDING | currency }}
+          </td>
+          <td class="border p-2">
+            {{ fundraiser.ACTIVE ? "Active" : "Inactive" }}
+          </td>
+          <td class="border p-2">
+            <button
+              class="bg-blue-500 text-white px-2 py-1 rounded mr-2"
+              (click)="selectFundraiser(fundraiser)"
+            >
+              Edit
+            </button>
+            <button
+              class="bg-red-500 text-white px-2 py-1 rounded"
+              (click)="deleteFundraiser(fundraiser.FUNDRAISER_ID!)"
+            >
+              Delete
+            </button>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 创建新募捐活动表单 -->
+  <div class="mb-8">
+    <h2 class="text-xl font-semibold mb-2">Create New Fundraiser</h2>
+    <form
+      (ngSubmit)="createFundraiser()"
+      #createForm="ngForm"
+      class="space-y-4"
+    >
+      <div>
+        <label for="caption" class="block">Caption:</label>
+        <input
+          type="text"
+          id="caption"
+          name="caption"
+          [(ngModel)]="newFundraiser.CAPTION"
+          required
+          class="w-full border p-2"
+        />
+      </div>
+      <div>
+        <label for="organizer" class="block">Organizer:</label>
+        <input
+          type="text"
+          id="organizer"
+          name="organizer"
+          [(ngModel)]="newFundraiser.ORGANIZER"
+          required
+          class="w-full border p-2"
+        />
+      </div>
+      <div>
+        <label for="city" class="block">City:</label>
+        <input
+          type="text"
+          id="city"
+          name="city"
+          [(ngModel)]="newFundraiser.CITY"
+          required
+          class="w-full border p-2"
+        />
+      </div>
+      <div>
+        <label for="category" class="block">Category:</label>
+        <select
+          id="category"
+          name="category"
+          [(ngModel)]="newFundraiser.CATEGORY_ID"
+          required
+          class="w-full border p-2"
+        >
+          @for (category of categories; track category.CATEGORY_ID) {
+          <option [value]="category.CATEGORY_ID">{{ category.NAME }}</option>
+          }
+        </select>
+      </div>
+      <div>
+        <label for="target" class="block">Target Funding:</label>
+        <input
+          type="number"
+          id="target"
+          name="target"
+          [(ngModel)]="newFundraiser.TARGET_FUNDING"
+          required
+          class="w-full border p-2"
+        />
+      </div>
+      <button
+        type="submit"
+        [disabled]="!createForm.form.valid"
+        class="bg-green-500 text-white px-4 py-2 rounded"
+      >
+        Create Fundraiser
+      </button>
+    </form>
+  </div>
+
+  <!-- 更新募捐活动表单 -->
+  @if (selectedFundraiser) {
+  <div class="mb-8">
+    <h2 class="text-xl font-semibold mb-2">Update Fundraiser</h2>
+    <form
+      (ngSubmit)="updateFundraiser()"
+      #updateForm="ngForm"
+      class="space-y-4"
+    >
+      <div>
+        <label for="edit-caption" class="block">Caption:</label>
+        <input
+          type="text"
+          id="edit-caption"
+          name="edit-caption"
+          [(ngModel)]="selectedFundraiser.CAPTION"
+          required
+          class="w-full border p-2"
+        />
+      </div>
+      <div>
+        <label for="edit-organizer" class="block">Organizer:</label>
+        <input
+          type="text"
+          id="edit-organizer"
+          name="edit-organizer"
+          [(ngModel)]="selectedFundraiser.ORGANIZER"
+          required
+          class="w-full border p-2"
+        />
+      </div>
+      <div>
+        <label for="edit-city" class="block">City:</label>
+        <input
+          type="text"
+          id="edit-city"
+          name="edit-city"
+          [(ngModel)]="selectedFundraiser.CITY"
+          required
+          class="w-full border p-2"
+        />
+      </div>
+      <div>
+        <label for="edit-category" class="block">Category:</label>
+        <select
+          id="edit-category"
+          name="edit-category"
+          [(ngModel)]="selectedFundraiser.CATEGORY_ID"
+          required
+          class="w-full border p-2"
+        >
+          @for (category of categories; track category.CATEGORY_ID) {
+          <option [value]="category.CATEGORY_ID">{{ category.NAME }}</option>
+          }
+        </select>
+      </div>
+      <div>
+        <label for="edit-target" class="block">Target Funding:</label>
+        <input
+          type="number"
+          id="edit-target"
+          name="edit-target"
+          [(ngModel)]="selectedFundraiser.TARGET_FUNDING"
+          required
+          class="w-full border p-2"
+        />
+      </div>
+      <div>
+        <label for="edit-status" class="block">Status:</label>
+        <select
+          id="edit-status"
+          name="edit-status"
+          [(ngModel)]="selectedFundraiser.ACTIVE"
+          required
+          class="w-full border p-2"
+        >
+          <option value="1">Active</option>
+          <option value="0">Inactive</option>
+        </select>
+      </div>
+      <button
+        type="submit"
+        [disabled]="!updateForm.form.valid"
+        class="bg-yellow-500 text-white px-4 py-2 rounded"
+      >
+        Update Fundraiser
+      </button>
+    </form>
+
+    <!-- 显示捐款列表 -->
+    <h3 class="text-lg font-semibold mt-4 mb-2">
+      Donations for this Fundraiser
+    </h3>
+    <table class="w-full border-collapse border">
+      <thead>
+        <tr>
+          <th class="border p-2">Date</th>
+          <th class="border p-2">Amount</th>
+          <th class="border p-2">Giver</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (donation of donations; track donation.DONATION_ID) {
+        <tr>
+          <td class="border p-2">{{ donation.DATE | date }}</td>
+          <td class="border p-2">{{ donation.AMOUNT | currency }}</td>
+          <td class="border p-2">{{ donation.GIVER }}</td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  }
+</div>
