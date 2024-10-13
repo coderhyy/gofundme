@@ -72,6 +72,12 @@ const dbOperations = {
 
   allCategories: () => query('SELECT * FROM CATEGORY'),
 
+  insertDonationForFundraiser: (values) => {
+    const sql = `INSERT INTO DONATION (DATE, AMOUNT, GIVER, FUNDRAISER_ID)
+    VALUES (?)`;
+    return query(sql,[values]);
+  },
+
   findFundraisersByCategory: (categoryId) => {
     const sql = `
       SELECT F.*, C.NAME AS CATEGORY_NAME 
@@ -80,7 +86,36 @@ const dbOperations = {
       WHERE F.CATEGORY_ID = ?
     `;
     return query(sql, [categoryId]);
+  },
+
+  insertFundraiser: (values) => {
+    const sql = `INSERT INTO FUNDRAISER (ORGANIZER, CAPTION, TARGET_FUNDING, CURRENT_FUNDING, CITY, ACTIVE, CATEGORY_ID)
+    VALUES (?)`;
+    return query(sql,[values]);
+  },
+  updateFundraiser: (values) => {
+    const sql = `
+      UPDATE FUNDRAISER 
+      SET 
+        ORGANIZER = ?, 
+        CAPTION = ?, 
+        TARGET_FUNDING = ?, 
+        CURRENT_FUNDING = ?, 
+        CITY = ?, 
+        ACTIVE = ?, 
+        CATEGORY_ID = ?
+      WHERE FUNDRAISER_ID = ?
+    `;
+    return query(sql, values);
+  },
+
+  findDonationbyFundraiserId: (fundraiserId) =>{
+    const sql = `select * from donation where FUNDRAISER_ID = ?`;
+    return query(sql, fundraiserId)
+  },
+  deleteFundraiser: (fundraiserId) => {
+    const sql = `DELETE FROM FUNDRAISER WHERE FUNDRAISER_ID = ?`;
+    return query(sql, [fundraiserId]);
   }
 };
-
 module.exports = dbOperations;

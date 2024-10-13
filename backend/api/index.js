@@ -10,7 +10,13 @@ const handleResponse = (ctx, result, successMsg, errorMsg) => {
       total: result.length,
       msg: successMsg
     };
-  } else {
+  }else if(result.affectedRows > 0){
+    // 如果 result 是 OkPacket（INSERT/UPDATE/DELETE 的执行结果）
+    ctx.body = {
+      data: null,
+      msg: successMsg
+    };
+  }else {
     ctx.body = {
       data: null,
       msg: errorMsg
@@ -50,4 +56,40 @@ router.get('/api/allCategories', errorHandler, async (ctx) => {
   handleResponse(ctx, result, 'query success', 'no data');
 });
 
+router.post('/api/addDonation', errorHandler, async (ctx) => {
+  list = ctx.request.body;
+  var values = [list.DATE,list.AMOUNT,list.GIVER,list.FUNDRAISER_ID];
+  const result = Model.insertDonationForFundraiser(values)
+  handleResponse(ctx, result, 'insert success', 'no data');
+});
+
+router.post('/api/addFundraiser', errorHandler, async(ctx) => {
+  list = ctx.request.body;
+  var values = [list.ORGANIZER,list.CAPTION,list.TARGET_FUNDING,list.CURRENT_FUNDING,list.CITY,list.ACTIVE,list.CATEGORY_ID];
+  const result = Model.insertFundraiser(values)
+  handleResponse(ctx, result, 'insert success', 'no data');
+});
+
+router.put('/api/updateFundraiser/:id', errorHandler, async(ctx) => {
+  list = ctx.request.body;
+  const fundraiserId = ctx.params.id
+  var values = [list.ORGANIZER,list.CAPTION,list.TARGET_FUNDING,list.CURRENT_FUNDING,list.CITY,list.ACTIVE,list.CATEGORY_ID,fundraiserId];
+  const result = Model.updateFundraiser(values)
+  handleResponse(ctx, result, 'update success', 'no data');
+});
+
+router.delete('/api/deleteFundraiser/:id', errorHandler, async(ctx) => {
+  const fundraiserId = ctx.params.id
+  const donationCheck = await Model.findDonationbyFundraiserId(fundraiserId);
+  if (donationCheck.length > 0) {
+    // If donations exist, respond with an error message
+    ctx.status = 400;
+    ctx.body = {
+      msg: 'Cannot delete fundraiser with existing donations.'
+    };
+  }else{
+    result= await Model.deleteFundraiser(fundraiserId);
+    handleResponse(ctx, result, 'delelte success', 'no data');
+  }
+})
 module.exports = router;
