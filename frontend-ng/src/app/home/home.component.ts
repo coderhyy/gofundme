@@ -2,6 +2,10 @@ import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { CardComponent } from '../card/card.component';
 
+interface FundraiserResponse {
+  data: Fundraiser[];
+}
+
 interface Fundraiser {
   ACTIVE: number;
   CAPTION: string;
@@ -31,9 +35,11 @@ export class HomeComponent {
 
   fetchFundraisers() {
     this.http
-      .get<Fundraiser[]>('http://localhost:3000/api/allFundraiser')
+      .get<FundraiserResponse>('http://localhost:3000/api/allFundraiser')
       .subscribe((data) => {
-        this.fundraisers = data;
+        console.log(data);
+
+        this.fundraisers = data.data;
       });
   }
 }
